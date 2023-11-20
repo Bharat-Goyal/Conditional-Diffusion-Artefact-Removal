@@ -142,6 +142,8 @@ class DiffuSELearner:
       param.grad = None
 
     audio = features['audio']
+    ### NOTE: replace with sample from ARCA, this is the noise sample here. 
+    ### TODO: what are audio and noisy if we already have spectrograms 
     noisy = features['noisy']
     spectrogram = features['spectrogram']
 

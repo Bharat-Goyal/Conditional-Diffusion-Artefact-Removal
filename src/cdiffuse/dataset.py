@@ -40,6 +40,7 @@ class NumpyDataset(torch.utils.data.Dataset):
     return len(self.specnames)
 
   def __getitem__(self, idx):
+    ###TODO: Continue looking into the format of the noisy and clean features here. 
     spec_filename = self.specnames[idx]
     if self.voicebank:
       spec_path = "/".join(spec_filename.split("/")[:-1])
