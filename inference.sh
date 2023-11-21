@@ -1,6 +1,8 @@
 stage=$1
 model_name=$2
-ckp=$3
+ckp=370200
+ckp_path='/home/hice1/bgoyal7/scratch/MLLimitedSupervision/Conditional-Diffusion-Artefact-Removal/model_weights/original_cdse/weights-370200.pt'
+
 
 . ./path.sh
 
@@ -27,12 +29,11 @@ if [[ ${stage} -le 2 ]]; then
     echo "stage 2 : inference model"
 
     test_spec_list=${spec_root}
-    
     enhanced_path=${output_path}/Enhanced/${model_name}/model${ckp}/test
     rm -r ${enhanced_path} 2>/dev/null
     mkdir -p ${enhanced_path} 
     echo "inference enhanced wav file from ${spec_root} to ${enhanced_path}"
-    python src/cdiffuse/inference.py  ${output_path}/${model_name}/weights-${ckp}.pt ${test_spec_list} ${voicebank_noisy} -o ${enhanced_path} --se --voicebank
+    python src/cdiffuse/inference.py  ${ckp_path} ${voicebank_noisy} ${test_spec_list} -o ${enhanced_path} --se --voicebank
 fi
 
 # if [[ ${stage} -le 3 ]]; then

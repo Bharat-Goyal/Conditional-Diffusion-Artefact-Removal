@@ -1,2 +1,2 @@
-output_path="/mnt/Data/user_vol_1/user_neillu/CDiffuSE"
-voicebank="/mnt/Data/user_vol_1/user_neillu/noisy-vctk/"
+output_path="/home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs"
+voicebank="/home/hice1/bgoyal7/scratch/MLLimitedSupervision/voicebank"
