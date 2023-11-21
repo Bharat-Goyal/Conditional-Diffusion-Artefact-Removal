@@ -1,3 +1,4 @@
+#!/bin/bash
 # export CUDA_VISIBLE_DEVICES='0,1,2'
 
 stage=$1
@@ -41,7 +42,8 @@ if [[ ${stage} -le 2 ]]; then
     if [ -z "$pretrain_model" ]; then
         python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank
     else
-        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank --pretrain_path ${output_path}/${pretrain_model}
+        echo "using pretrained" 
+        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank --pretrain_path /home/hice1/bgoyal7/scratch/MLLimitedSupervision/Conditional-Diffusion-Artefact-Removal/model_weights/original_cdse/weights-370200.pt --max_steps=676
     fi
 fi
 

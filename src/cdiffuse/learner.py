@@ -19,7 +19,7 @@ import torch
 import torch.nn as nn
 
 from torch.nn.parallel import DistributedDataParallel
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 import pdb
 
@@ -131,8 +131,8 @@ class DiffuSELearner:
         if torch.isnan(loss).any():
           raise RuntimeError(f'Detected NaN loss at step {self.step}.')
         if self.is_master:
-          if self.step % 50 == 0:
-            self._write_summary(self.step, features, loss)
+          # if self.step % 50 == 0:
+          #   self._write_summary(self.step, features, loss)
           if self.step % len(self.dataset) == 0:
             self.save_to_checkpoint()
         self.step += 1

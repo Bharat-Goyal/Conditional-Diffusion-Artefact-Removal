@@ -100,12 +100,14 @@ class Collator:
 
 def from_path(clean_dir, noisy_dir, data_dirs, params, se=True, voicebank=False, is_distributed=False):
   dataset = NumpyDataset(clean_dir, noisy_dir, data_dirs, se, voicebank)
+  num_workers_slurm = int(os.environ.get('SLURM_CPUS_PER_TASK')) if 'SLURM_CPUS_PER_TASK' in os.environ else os.cpu_count()
+  # print(num_workers_slurm)
   return torch.utils.data.DataLoader(
       dataset,
       batch_size=params.batch_size,
       collate_fn=Collator(params).collate,
       shuffle=not is_distributed,
-      num_workers=os.cpu_count(),
+      num_workers= num_workers_slurm,
       sampler=DistributedSampler(dataset) if is_distributed else None,
       pin_memory=True,
       drop_last=True)

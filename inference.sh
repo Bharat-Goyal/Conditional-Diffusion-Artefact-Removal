@@ -1,7 +1,8 @@
+#!/bin/bash
 stage=$1
 model_name=$2
-ckp=370200
-ckp_path='/home/hice1/bgoyal7/scratch/MLLimitedSupervision/Conditional-Diffusion-Artefact-Removal/model_weights/original_cdse/weights-370200.pt'
+ckp=$3
+ckp_path=$4
 
 
 . ./path.sh
@@ -27,7 +28,7 @@ fi
 
 if [[ ${stage} -le 2 ]]; then
     echo "stage 2 : inference model"
-
+####IF THERE ARE ISSUES WITH LOADING THE MODEL, GO CHANGE THE PARAMETERS IN PARAMS.PY
     test_spec_list=${spec_root}
     enhanced_path=${output_path}/Enhanced/${model_name}/model${ckp}/test
     rm -r ${enhanced_path} 2>/dev/null
