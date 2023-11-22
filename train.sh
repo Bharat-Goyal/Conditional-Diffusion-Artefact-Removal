@@ -40,10 +40,10 @@ if [[ ${stage} -le 2 ]]; then
     train_spec_list="${train_spec_list} ${spec_path}"
     
     if [ -z "$pretrain_model" ]; then
-        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank
+        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank --max_steps=250000
     else
         echo "using pretrained" 
-        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank --pretrain_path /home/hice1/bgoyal7/scratch/MLLimitedSupervision/Conditional-Diffusion-Artefact-Removal/model_weights/original_cdse/weights-370200.pt --max_steps=676
+        python src/cdiffuse/__main__.py ${output_path}/${model_name} ${target_wav_root} ${noisy_wav_root} ${train_spec_list}  --se  --voicebank --pretrain_path ${pretrain_model} --max_steps=676
     fi
 fi
 

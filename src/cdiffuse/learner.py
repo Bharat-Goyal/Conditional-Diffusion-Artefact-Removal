@@ -122,6 +122,7 @@ class DiffuSELearner:
 
   def train(self, max_steps=None):
     device = next(self.model.parameters()).device
+    # print(f'Model self.params: {self.params}, self.params.noise_schedule: {self.params.noise_schedule}')
     while True:
       for features in tqdm(self.dataset, desc=f'Epoch {self.step // len(self.dataset)}') if self.is_master else self.dataset:
         if max_steps is not None and self.step >= max_steps:
@@ -150,14 +151,15 @@ class DiffuSELearner:
     self.noise_level = self.noise_level.to(device)
 
     with self.autocast:
-      t = torch.randint(0, len(self.params.noise_schedule), [N], device=audio.device)
+      t = 49#torch.randint(0, len(self.params.noise_schedule), [N], device=audio.device)
       noise_scale = self.noise_level[t].unsqueeze(1)
       noise_scale_sqrt = noise_scale**0.5
-      m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 
-      noise = torch.randn_like(audio)
-      noisy_audio = (1-m) * noise_scale_sqrt  * audio + m * noise_scale_sqrt * noisy  + (1.0 - (1+m**2) *noise_scale)**0.5 * noise
-      combine_noise = (m * noise_scale_sqrt * (noisy-audio) + (1.0 - (1+m**2) *noise_scale)**0.5 * noise) / (1-noise_scale)**0.5
+      # m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 
+      # noise = torch.randn_like(audio)
+      noisy_audio = noisy#(1-m) * noise_scale_sqrt  * audio + m * noise_scale_sqrt * noisy  + (1.0 - (1+m**2) *noise_scale)**0.5 * noise
+      combine_noise = (m * noise_scale_sqrt * (noisy-audio)) / (1-noise_scale)**0.5
       predicted = self.model(noisy_audio, spectrogram, t)
+      print(f'{predicted.shape}')
       loss = self.loss_fn(combine_noise, predicted.squeeze(1))
 
     self.scaler.scale(loss).backward()
@@ -180,7 +182,6 @@ class DiffuSELearner:
 def _train_impl(replica_id, model, dataset, args, params):
   torch.backends.cudnn.benchmark = True
   opt = torch.optim.Adam(model.parameters(), lr=params.learning_rate)
-
   learner = DiffuSELearner(args.model_dir, model, dataset, opt, params, fp16=args.fp16)
   learner.is_master = (replica_id == 0)
   learner.restore_from_checkpoint(args.pretrain_path)
