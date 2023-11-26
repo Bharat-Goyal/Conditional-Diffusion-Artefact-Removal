@@ -14,7 +14,7 @@ source ~/.bashrc
 conda activate cdiff
 # python scripts/parse_arca.py --start=0 --end=11572
 #11573
-# srun ./inference.sh 2 arcaAugmentedFinal 50 /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaAugmented1/weights-33750.pt
+srun ./inference.sh 2 arcaAugmentedFinal 50 /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaAugmented1/weights-33750.pt
 srun ./inference.sh 2 arcaAugmentedFinal 100 /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaAugmented2/weights-29700.pt
 srun ./inference.sh 2 arcaAugmentedFinal 150 /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaAugmented3/weights-22275.pt
 srun ./inference.sh 2 arcaAugmentedFinal 200 /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaAugmented4/weights-18225.pt
