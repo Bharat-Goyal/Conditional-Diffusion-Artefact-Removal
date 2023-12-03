@@ -151,7 +151,7 @@ class DiffuSELearner:
     self.noise_level = self.noise_level.to(device)
 
     with self.autocast:
-      t = torch.randint(len(self.params.noise_schedule)-1, len(self.params.noise_schedule), [N], device=audio.device)
+      t = torch.randint(0, len(self.params.noise_schedule), [N], device=audio.device)
       noise_scale = self.noise_level[t].unsqueeze(1)
       noise_scale_sqrt = noise_scale**0.5
       m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 

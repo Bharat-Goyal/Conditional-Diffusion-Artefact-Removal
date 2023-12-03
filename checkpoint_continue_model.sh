@@ -12,10 +12,10 @@ conda activate cdiff
 
 cur=6
 nxt=$((cur+1))
-cd /home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/out/arcaLarge${cur}
+cd /home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaLarge${cur}
 most_recent_checkpoint=$(ls -t | head -n 1)
 #next line add ${cur}
-checkpoint_path="/home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/out/arcaLarge${cur}/$most_recent_checkpoint"
+checkpoint_path="/home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs/arcaLarge${cur}/$most_recent_checkpoint"
 
 cd $SLURM_SUBMIT_DIR
 srun ./train.sh 2 arcaLarge${nxt} ${checkpoint_path}
