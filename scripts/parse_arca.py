@@ -6,12 +6,13 @@ import csv
 import random
 import torchaudio, torch
 import soundfile as sf
+from tqdm import tqdm
 
 def main(args):
     os.path.join(args.voicebank_clean, 'clean_trainset_28spk_wav')
     all_vb = glob(f'{args.voicebank_clean}/clean_trainset_28spk_wav/*.wav', recursive=True)
     all_vb = sorted(all_vb)
-    output_dir = os.path.join(args.voicebank_clean, 'noisy_trainset_28spk_wav_without_gaussian')
+    output_dir = os.path.join(args.voicebank_clean, 'noisy_trainset_28spk_wav_without_gaussian_tqdm')
     # Parse the CSV file
     csv_file = f'{args.arka23k_dir}/ARCA23K.ground_truth/train.csv'
     files_by_label = {}
@@ -26,7 +27,7 @@ def main(args):
     # for (label, files) in files_by_label.items():
     #     print(f'{label}: {len(files)}')
     labels = sorted(list(files_by_label.keys()))
-    for i in range(args.start, args.end):
+    for i in tqdm(range(args.start, args.end)):
         clean_audio, _ = librosa.load(all_vb[i], sr=16000)
         noise_count = np.random.randint(2, 6)
         noise_files = []
@@ -56,9 +57,10 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description='create test samples with arca23k and gaussian noise in them')
-    parser.add_argument('--voicebank_clean', default= '/home/hice1/bgoyal7/scratch/MLLimitedSupervision/voicebank', type=str,
+    # parser.add_argument('--voicebank_clean', default= '/home/hice1/bgoyal7/scratch/MLLimitedSupervision/voicebank', type=str,
+    parser.add_argument('--voicebank_clean', default= '/home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/downloads', type=str,
         help='directory with clean voicebank speech wav files')
-    parser.add_argument('--arka23k_dir', default= '/home/hice1/bgoyal7/scratch/MLLimitedSupervision/arca23k', type=str,
+    parser.add_argument('--arka23k_dir', default= '/home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/downloads/arca23k', type=str,
         help='arka23k directory')
     parser.add_argument('--start', default=0, type=int,
         help='maximum number of training steps')

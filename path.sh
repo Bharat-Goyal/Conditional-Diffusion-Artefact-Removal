@@ -1,2 +1,2 @@
-output_path="/home/hice1/bgoyal7/scratch/MLLimitedSupervision/all_outputs"
-voicebank="/home/hice1/bgoyal7/scratch/MLLimitedSupervision/voicebank"
+output_path="/home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/out"
+voicebank="/home/hice1/ksinha45/scratch/cs7647/cs7647/Conditional-Diffusion-Artefact-Removal/downloads"

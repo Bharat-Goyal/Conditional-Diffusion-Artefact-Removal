@@ -169,6 +169,7 @@ def main(args):
   for path in args.spectrogram_path:
     specnames += glob(f'{path}/*.wav.spec.npy', recursive=True)
   # print(f'spec names: {specnames}')
+  print("MODEL DIR:", args.model_dir)
   model = load_model(model_dir=args.model_dir ,args=args)
   alpha, beta, alpha_cum, sigmas, T,c1, c2, c3, delta, delta_bar = inference_schedule(model, fast_sampling=args.fast)
 

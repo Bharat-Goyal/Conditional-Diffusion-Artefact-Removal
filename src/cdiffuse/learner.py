@@ -151,16 +151,27 @@ class DiffuSELearner:
     self.noise_level = self.noise_level.to(device)
 
     with self.autocast:
-      t = 49#torch.randint(0, len(self.params.noise_schedule), [N], device=audio.device)
+      t = torch.randint(len(self.params.noise_schedule) - 1, len(self.params.noise_schedule), [N], device=audio.device)
       noise_scale = self.noise_level[t].unsqueeze(1)
       noise_scale_sqrt = noise_scale**0.5
-      # m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 
-      # noise = torch.randn_like(audio)
-      noisy_audio = noisy#(1-m) * noise_scale_sqrt  * audio + m * noise_scale_sqrt * noisy  + (1.0 - (1+m**2) *noise_scale)**0.5 * noise
-      combine_noise = (m * noise_scale_sqrt * (noisy-audio)) / (1-noise_scale)**0.5
+      m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 
+      noise = torch.randn_like(audio)
+      noisy_audio = noise_scale_sqrt * noisy  + (1.0 - (1+m**2) *noise_scale)**0.5 * noise
+      combine_noise = (m * noise_scale_sqrt * (noisy-audio) + (1.0 - (1+m**2) *noise_scale)**0.5 * noise) / (1-noise_scale)**0.5
       predicted = self.model(noisy_audio, spectrogram, t)
-      print(f'{predicted.shape}')
       loss = self.loss_fn(combine_noise, predicted.squeeze(1))
+      
+      
+      # t = 49#torch.randint(0, len(self.params.noise_schedule), [N], device=audio.device)
+      # noise_scale = self.noise_level[t].unsqueeze(1)
+      # noise_scale_sqrt = noise_scale**0.5
+      # # m = (((1-self.noise_level[t])/self.noise_level[t]**0.5)**0.5).unsqueeze(1) 
+      # # noise = torch.randn_like(audio)
+      # noisy_audio = noisy#(1-m) * noise_scale_sqrt  * audio + m * noise_scale_sqrt * noisy  + (1.0 - (1+m**2) *noise_scale)**0.5 * noise
+      # combine_noise = (m * noise_scale_sqrt * (noisy-audio)) / (1-noise_scale)**0.5
+      # predicted = self.model(noisy_audio, spectrogram, t)
+      # print(f'{predicted.shape}')
+      # loss = self.loss_fn(combine_noise, predicted.squeeze(1))
 
     self.scaler.scale(loss).backward()
     self.scaler.unscale_(self.optimizer)
